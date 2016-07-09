@@ -2,6 +2,7 @@
 #Author: Peter Harrington
 
 from math import log
+import operator
 
 def clacShannonEnt(dataSet):      #This function will calculate the Shannon Entropy of the given dataSet
 	numEntries = len(dataSet)
@@ -54,3 +55,12 @@ def chooseBestFeatureToSplit(dataSet):
 			bestInfoGain = infoGain
 			bestFeature = i
 	return  bestFeature
+
+def majorityCnt(classList):		#This function is used to determine the class of  the leaf node
+	classCount = {}
+	for vote in classList:
+		if vote not in classCount.keys():
+			classCount[vote] = 0
+		classCount[vote] += 1
+	sortedClassCount = sorted(classCount.iteritems() , key = operator.itemgetter(1) , reverse = True)
+	return sortedClassCount[0][0]
