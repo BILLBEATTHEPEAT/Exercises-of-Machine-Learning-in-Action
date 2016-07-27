@@ -18,11 +18,8 @@ def loadDataSet():
 
 def createVocabList(dataSet):
 	vocabSet = set([])
-	for document in dataSet:	#<--- this is the code from the book
+	for document in dataSet:	
 		vocabSet = vocabSet | set(document)
-	# vocabSet = []
-	# for document in dataSet:                   #let's use some quick method(but the vocabSet will be a 2-dimension list)
-	# 	vocabSet.append(example)
 	return ( vocabSet )
 
 def setOfWords2Vec(vocabList , inputSet):
