@@ -29,6 +29,18 @@ def TrainTheClassifier(trainMatrix , trainLabel):	#This function will return 3 a
 	p_w_1= log(p1 / p1num)
 	p_w_0 = log(p0 / p0num)
 	p_c = log(sum(trainLabel) / NumExams)
+	p_not_c =  log(1 - sum(trainLabel) / NumExams)
 
 	return p_w_0 , p_w_1 , p_c 
 
+def classifierNB(vec2Classify , p0Vec , p1Vec , pClass1 , pClass0):
+	p1 = sum(vec2Classify * p1Vec) + pClass1
+	p0 = sum(vec2Classify * p0Vec) + pClass0
+
+	if p1 > p0:
+		return 1
+	elif p1 < p0:
+		return 0
+	else:
+		print "This can be regard as any type as you like"
+		return -1
