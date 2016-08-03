@@ -32,7 +32,7 @@ def sigmoid(inX):
 
 #The following part of code is implemented by myself, which realized the Gradient Ascent Algorithm
 
-def GraAscent(dataMatIn , classMatIn , rate , NumIterat):		#rate means the rate of learning, NumIterat means the time of iteration
+def GradAscent(dataMatIn , classMatIn , rate , NumIterat):		#rate means the rate of learning, NumIterat means the time of iteration
 	dataMat = np.array(dataMatIn)
 	labelMat = np.array(classMatIn)
 	weiMat = np.ones(dataMat.shape[1])
@@ -48,5 +48,35 @@ def GraAscent(dataMatIn , classMatIn , rate , NumIterat):		#rate means the rate 
 								      #which shows the same result as calculate the partial derivative
 	return weiMat
 	  
-######     REMEMBER: here the parameters and values that we use to calculate are all in the form of MATRIX!!!
-######                               So I have to use the method ".dot()"
+			######     REMEMBER: here the parameters and values that we use to calculate are all in the form of MATRIX!!!
+			######                               So I have to use the method ".dot()"
+
+
+
+#The following part is one of the simple version of  Stochastic Gradient Ascent Algorithm
+#Finished by myself 
+#2016.8.3
+def StoGradAscent0(dataMatIn , classMatIn , rate , NumIterat):
+	dataMat = np.array(dataMatIn)
+	labelMat = np.array(classMatIn)
+	weiMat = np.ones(dataMat.shape[1])
+	count = 0
+
+	for time in range(NumIterat):
+
+		for inx in range(dataMat.shape[0]):
+			y = sigmoid( dataMat[inx].dot(weiMat) )
+			err = labelMat[inx] - y
+			weiMat = weiMat + rate * (dataMat[inx].T).dot(err)
+		count += 1
+
+	print 'Iterated %d times' % count
+	return weiMat
+
+	#This version simply iterates every examples in the dataMatIn to update the weights.
+	# So it is not so precise as the former version (Non-stochastic version) in low iterate times.
+	# As the result of my experiments, when the NumIterat is up to 100, this algorithm will show a good result.
+
+		
+
+
