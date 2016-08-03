@@ -23,7 +23,7 @@ def loadDataSet():
 
 		labelMat.append(int(lineArr[2]))
 
-	return dataMat , labelMat
+	return np.array(dataMat) , np.array(labelMat)
 
 def sigmoid(inX):
 	return 1.0 / ( 1 + np.exp(-inX) )
@@ -56,6 +56,7 @@ def GradAscent(dataMatIn , classMatIn , rate , NumIterat):		#rate means the rate
 #The following part is one of the simple version of  Stochastic Gradient Ascent Algorithm
 #Finished by myself 
 #2016.8.3
+#version 0
 def StoGradAscent0(dataMatIn , classMatIn , rate , NumIterat):
 	dataMat = np.array(dataMatIn)
 	labelMat = np.array(classMatIn)
@@ -77,6 +78,36 @@ def StoGradAscent0(dataMatIn , classMatIn , rate , NumIterat):
 	# So it is not so precise as the former version (Non-stochastic version) in low iterate times.
 	# As the result of my experiments, when the NumIterat is up to 100, this algorithm will show a good result.
 
-		
+
+#This is a better version of SGA
+#completed by myself
+#2016.8.3
+#version 1
+def StoGradAscent1(dataMatIn , classMatIn , rate , NumIterat):
+	dataMat = np.array(dataMatIn)
+	labelMat = np.array(classMatIn)
+	alpha = rate
+
+	weiMat = np.ones(dataMat.shape[1])
+	count = 0
+
+	for time in range(NumIterat):
+
+		for i in range(dataMatIn.shape[0]):
+			
+			########  This function is copied from book MLiA
+			alpha = 4/(1.0 + time + i) + 0.01
+			########
+
+			inx = np.random.randint(0 , dataMat.shape[0])
+			y = sigmoid( dataMat[inx].dot(weiMat) )
+			err = labelMat[inx] - y
+			weiMat = weiMat + alpha * (dataMat[inx].T).dot(err)
+			np.delete(dataMat , inx , axis = 0)
+		count += 1
+
+	print 'Iterated %d times' % count
+	return weiMat
+
 
 
