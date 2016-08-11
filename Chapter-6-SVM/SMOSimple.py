@@ -35,7 +35,7 @@ def smoSimple( dataMatIn , classLabels , C , toler , maxIter):
 							#calculate the prediciton and error
 				alphaIold = alphas[i].copy()
 				alphaJold = alphas[j].copy()
-
+						# allocate new memory for old value
 				if (labelMat[i] != labelMat[j]):			# this part is using for making sure the value of alpha is between 0 and C
 					L = max ( 0 , alphas[j] - alphas[i] )
 					H = min ( C , C + alphas[j] - alphas[i] )
@@ -54,19 +54,20 @@ def smoSimple( dataMatIn , classLabels , C , toler , maxIter):
 				alphas[j] -= labelMat[j] * (Ei - Ej) / eta
 				alphas[j] = clipAlpha(alphas[j] , H , L)
 
-				if ( abs( alphas[j] - alphaJold ) < 0.00001 ):
+				if ( abs( alphas[j] - alphaJold ) < 0.00001 ):			#exame that whether the change is too small
 					print "j not moving enough" ; continue
 				
-				alphas[i] += labelMat[j] * labelMat[i] * (alphaJold - alphas[j])
+				alphas[i] += labelMat[j] * labelMat[i] * (alphaJold - alphas[j])     # alpha_i and alpha_j have been changed in opposite way
+
 				b1 = b - Ei - labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i , :] * dataMatrix[i , :].T - labelMat[j] * (alphas[j] - alphaJold) * dataMatrix[i , :] * dataMatrix[j , :].T
 				b2 = b - Ej - labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i , :] * dataMatrix[j , :].T - labelMat[j] * (alphas[j] - alphaJold) * dataMatrix[j , :] * dataMatrix[j , :].T
-				
+					
 				if ( 0 < alphas[i] ) and ( C > alphas[j] ) :
 					b = b1
 				elif (0 < alphas[j]) and ( C > alphas[j] ):
 					b = b2
 				else:
-					b = (b1 + b2) / 2
+					b = (b1 + b2) / 2				# update the constant b
 
 				alphaPairsChanged += 1
 				print "iter : %d i: %d, pairs changed %d" % (iter , i , alphaPairsChanged)
