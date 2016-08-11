@@ -6,26 +6,37 @@ from numpy import *
 from Prebatch import *
 
 
-def smoSimple( dataMatIn , classLabels , C , toler , maxIter):
-	dataMatrix = mat(dataMatIn) ; labelMat = mat(classLabels).transpose()
+def smoSimple( dataMatIn , classLabels , C , toler , maxIter):  
+				# this is a simple demo of the SMO algorithm
+				# random choosing alpha pair to optimi
+				# C means a constant which is used to measure the distance of support vector
+				# toler means the tolerance of making mistakes
+				#maxIter means the maximun number of iteration
+
+	dataMatrix = mat(dataMatIn) ; labelMat = mat(classLabels).transpose()  #make labelMat a vector
 	b = 0 ; m , n = shape(dataMatrix)
 	alphas = mat(zeros( (m , 1) ))
-	iter = 0
+	iter = 0					
 	while (iter < maxIter):		# The upper layer of iteration
-		alphaPairsChanged = 0
+		alphaPairsChanged = 0	#showing whether the alpha pair have been changed during a round
 
 		for i in range(m):	# The second layer of iteration
 			fXi = float( multiply( alphas , labelMat ).T * ( dataMatIn * dataMatrix[i , :].T ) ) + b
-			Ei = fXi - float( labelMat[i] )
+				# the prediction of example i
+			Ei = fXi - float( labelMat[i] )	#error of prediciton
 
 			if ( (labelMat[i] * Ei < -toler) and ( alphas[i] < C ) ) or ( (labelMat[i] * Ei > toler) and (alphas[i] > 0) ):
-				j = selectJrand(i , m)
+							#both the positive and negtive interval wiil be measured
+
+				j = selectJrand(i , m)	# choose the other alpha randomly
+
 				fXj = float( multiply( alphas , labelMat ).T * (dataMatrix * dataMatrix[j,:].T) ) + b
 				Ej = fXj - float( labelMat[j] )
+							#calculate the prediciton and error
 				alphaIold = alphas[i].copy()
 				alphaJold = alphas[j].copy()
 
-				if (labelMat[i] != labelMat[j]):
+				if (labelMat[i] != labelMat[j]):			# this part is using for making sure the value of alpha is between 0 and C
 					L = max ( 0 , alphas[j] - alphas[i] )
 					H = min ( C , C + alphas[j] - alphas[i] )
 				else:
@@ -36,9 +47,9 @@ def smoSimple( dataMatIn , classLabels , C , toler , maxIter):
 					print "L = H" ; continue
 
 				eta = 2.0 * dataMatrix[i , :] * dataMatrix[j , :].T - dataMatrix[j , :] * dataMatrix[j , :].T
-				
+							#the best modified quantity
 				if eta >= 0:
-					print "eta >= 0" ; continue
+					print "eta >= 0" ; continue  #assure that the funciton will become convergent
 
 				alphas[j] -= labelMat[j] * (Ei - Ej) / eta
 				alphas[j] = clipAlpha(alphas[j] , H , L)
