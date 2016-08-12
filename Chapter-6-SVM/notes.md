@@ -5,9 +5,13 @@
 ###1. Dual variable Optimization (Lagrange Duality):
 #####Reference:
   > http://blog.pluskid.org/?p=682
+
+###2. KKT Condition:
+#####Reference:
+  > http://www.onmyphd.com/?p=kkt.karush.kuhn.tucker
+  > http://blog.csdn.net/xianlingmao/article/details/7919597
   
-  
-###2. Kernel Trick:
+###3. Kernel Trick:
 #####Reference:
   > http://blog.csdn.net/zouxy09/article/details/17291805
   
